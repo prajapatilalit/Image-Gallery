@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import axios from "axios";
+import UnplashApi from "../api/UnplashApi";
 import SearchBar from "./SearchBar";
+import ImageList from "./ImageList";
 
 class App extends Component {
   state = {
@@ -8,11 +9,8 @@ class App extends Component {
   };
 
   onFormSubmit = async (text) => {
-    const response = await axios.get("https://api.unsplash.com/search/photos", {
+    const response = await UnplashApi.get("/search/photos", {
       params: { query: text },
-      headers: {
-        Authorization: "Client-ID dvNGhJ2CNPL4XjWgTpVQYag0FCidzbO5bZSs6Pe0_Z4",
-      },
     });
 
     this.setState({ images: response.data.results });
@@ -22,7 +20,7 @@ class App extends Component {
     return (
       <div className="ui container" style={{ marginTop: 10 }}>
         <SearchBar onSubmit={this.onFormSubmit} />
-        Found: {this.state.images.length} images
+        <ImageList images={this.state.images} />
       </div>
     );
   }
